@@ -2,6 +2,8 @@ const express  = require('express');
 const exphbs  = require('express-handlebars');
 const mongoose = require('mongoose');
 var bodyParser = require('body-parser');
+const methodOverride = require('method-override');
+
 
 const app = express();
 
@@ -26,8 +28,16 @@ app.engine('handlebars', exphbs({
 app.set('view engine', 'handlebars');
 
 // Body parser middleware
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+// Method override middleware
+// override with POST having ?_method=DELETE
+app.use(methodOverride('_method'));
+
+
+
+
 
 // INDEX ROUTE
 app.get('/', (req, res) => {
@@ -122,6 +132,27 @@ app.get('/ideas', (req, res) => {
 });
 
 
+// EDIT FORM PROCESS
+app.put('/ideas/:id', (req, res) => {
+  // res.send('PUT');
+  Idea.findOne({
+    _id: req.params.id
+  })
+  .then(idea => {
+    // new values
+    idea.title = req.body.title;
+    idea.details = req.body.details;
+
+    idea.save()
+      .then(idea => {
+        res.redirect('/ideas');
+      })
+  });
+});
+//** we cant just change the method="put" in form to update changes. 
+// So we have to dl "method-override" module 
+// 2 ways to implement: using header or query-value
+// other option is to use AJAX.
 
 
 // ABOUT ROUTE
