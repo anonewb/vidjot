@@ -5,6 +5,9 @@
   <div class="card card-body mb-2">
     <h4>{{title}}</h4>
     <p>{{details}}</p>
+    {{!-- ADDING BTN TO EDIT --}}
+    {{!-- {{id}} is generated automatically for each IDEA obj --}}
+    <a href="/ideas/edit/{{id}}" class="btn btn-dark btn-block">Edit</a>
   </div>
 {{else}}
   <p>No video ideas listed</p>

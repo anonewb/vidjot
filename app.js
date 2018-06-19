@@ -48,6 +48,19 @@ app.get('/ideas/add', (req, res) => {
   res.render('ideas/add');
 });
 
+// EDIT IDEA FORM ROUTE
+app.get('/ideas/edit/:id', (req, res) => { // ':id' is a parameter OR placeholder which is diff
+  // EDITING THE particular IDEA using id
+  Idea.findOne({
+    _id: req.params.id
+  })
+  .then(idea => {
+    res.render('ideas/edit', {
+      idea: idea
+    });
+  });
+});
+
 // POSTING, PROCESSING AND SAVING IDEA TO MONGODB
 app.post('/ideas', (req, res) => {
   // res.send('ideas processed');
