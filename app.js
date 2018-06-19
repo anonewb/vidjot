@@ -7,7 +7,7 @@ const methodOverride = require('method-override');
 
 const app = express();
 
-
+// Now our app can perform CRUD operations
 
 // Connect to mongoose
 // db could be local or remote using mlab
