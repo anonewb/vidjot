@@ -162,7 +162,14 @@ app.get('/about', (req, res) => {
 });
 
 
-
+// DELETE ROUTE
+app.delete('/ideas/:id', (req, res) => {
+  // res.send('del');
+  Idea.remove({_id: req.params.id})
+    .then(() => {
+      res.redirect('/ideas');
+    });
+});
 
 
 // LISTENING TO PORT 5000
