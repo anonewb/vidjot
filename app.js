@@ -17,6 +17,7 @@ mongoose.connect('mongodb://localhost/vidjot-dev')
 require('./models/Idea');
 const Idea = mongoose.model('ideas');
 
+// MIDDLEWARES
 
 // Handlebars middleware
 app.engine('handlebars', exphbs({
@@ -28,7 +29,7 @@ app.set('view engine', 'handlebars');
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-// Index Route
+// INDEX ROUTE
 app.get('/', (req, res) => {
   const title = 'Welcome';
   // res.send('INDEX');
@@ -37,17 +38,24 @@ app.get('/', (req, res) => {
   });
 });
 
-// Add Idea Form
+
+
+// ROUTING
+
+// ADD IDEA FORM ROUTE
 app.get('/ideas/add', (req, res) => {
+  // ADDING IDEAS USING FORM
   res.render('ideas/add');
 });
 
-// Process Form and server side validation
+// POSTING, PROCESSING AND SAVING IDEA TO MONGODB
 app.post('/ideas', (req, res) => {
   // res.send('ideas processed');
   // body-parser is required. 
   // "req.body" is an obj with all our form-fields
   // console.log(req.body); 
+
+  // VALIDATING ON SERVER SIDE
   let errors = [];
 
   if (!req.body.title) {
@@ -65,6 +73,7 @@ app.post('/ideas', (req, res) => {
     });
   } else {
     // res.send('passed');
+    // IF VALID, THEN CREATE NEW IDEA AND SAVE IT TO MONGODB
     const newUser = {
       title: req.body.title,
       details: req.body.details
@@ -86,12 +95,33 @@ app.post('/ideas', (req, res) => {
   }
 });
 
-// About Route
+// IDEA INDEX PAGE
+app.get('/ideas', (req, res) => {
+  // FETCHING IDEAS FROM MONGODB
+  Idea.find({})
+    .sort({date:'desc'})
+    .then(ideas => {
+      // RENDERING ALL THE IDEAS
+      res.render('ideas/index', {
+        ideas: ideas
+      });
+    });
+});
+
+
+
+
+// ABOUT ROUTE
 app.get('/about', (req, res) => {
   // res.send('ABOUT');
   res.render('about');
 });
 
+
+
+
+
+// LISTENING TO PORT 5000
 
 const port = 5000;
 
