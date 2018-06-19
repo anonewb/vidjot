@@ -1,16 +1,29 @@
 const express  = require('express');
+const exphbs  = require('express-handlebars');
 
 const app = express();
 
+
+app.engine('handlebars', exphbs({
+  defaultLayout: 'main'
+}));
+app.set('view engine', 'handlebars');
+
 // Index Route
 app.get('/', (req, res) => {
-  res.send('INDEX');
+  const title = 'Welcome';
+  // res.send('INDEX');
+  res.render('index', {
+    title: title
+  });
 });
 
 // About Route
 app.get('/about', (req, res) => {
-  res.send('ABOUT');
+  // res.send('ABOUT');
+  res.render('about');
 });
+
 
 const port = 5000;
 
