@@ -1,6 +1,7 @@
 const express  = require('express');
 const exphbs  = require('express-handlebars');
 const mongoose = require('mongoose');
+var bodyParser = require('body-parser');
 
 const app = express();
 
@@ -23,6 +24,10 @@ app.engine('handlebars', exphbs({
 }));
 app.set('view engine', 'handlebars');
 
+// Body parser middleware
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
 // Index Route
 app.get('/', (req, res) => {
   const title = 'Welcome';
@@ -35,6 +40,32 @@ app.get('/', (req, res) => {
 // Add Idea Form
 app.get('/ideas/add', (req, res) => {
   res.render('ideas/add');
+});
+
+// Process Form and server side validation
+app.post('/ideas', (req, res) => {
+  // res.send('ideas processed');
+  // body-parser is required. 
+  // "req.body" is an obj with all our form-fields
+  // console.log(req.body); 
+  let errors = [];
+
+  if (!req.body.title) {
+    errors.push({text: 'Please add a title'});
+  }
+  if (!req.body.details) {
+    errors.push({text: 'Please add some details'});
+  }
+
+  if (errors.length > 0) {
+    res.render('ideas/add', {
+      errors: errors,
+      title: req.body.title,
+      details: req.body.details
+    });
+  } else {
+    res.send('passed');
+  }
 });
 
 // About Route
