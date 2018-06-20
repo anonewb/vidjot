@@ -1,3 +1,9 @@
+{{!-- passport's error var --}}
+{{#if error}}
+  <div class="alert alert-danger">{{error}}</div>
+{{/if}}
+
+
 {{!-- server side validation showing errors --}}
 {{#each errors}}
   <div class="alert alert-danger">{{text}}</div>
