@@ -6,6 +6,7 @@ const methodOverride = require('method-override');
 const session = require('express-session');
 const flash = require('connect-flash');
 const path = require('path'); //no req to install
+const passport = require('passport');
 
 const app = express();
 
@@ -14,7 +15,8 @@ const app = express();
 const ideas = require('./routes/ideas');
 const users = require('./routes/users');
 
-
+// Passport Config
+require('./config/passport')(passport);
 
 
 // Connect to mongoose

@@ -21,7 +21,16 @@ router.get('/register', (req, res) => {
   res.render('users/register');
 });
 
-// USER REGISTER ROUTE
+// LOGIN FORM POST
+router.post('/login', (req, res, next) => {
+  passport.authenticate('local', { // here we are using'local' strategy
+    successRedirect: '/ideas',
+    failureRedirect: '/users/login',
+    failureFlash: true
+  })(req, res, next); 
+});
+
+// REGISTER FORM POST
 router.post('/register', (req, res) => {
   // console.log(req.body);
   // res.send('register');
