@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const session = require('express-session');
 const flash = require('connect-flash');
-
+const path = require('path'); //no req to install
 
 const app = express();
 
@@ -25,6 +25,9 @@ mongoose.connect('mongodb://localhost/vidjot-dev')
 
 
 // MIDDLEWARES
+
+// This middleware sets the 'public' folder to express static folder
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Handlebars middleware
 app.engine('handlebars', exphbs({
