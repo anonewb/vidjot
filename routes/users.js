@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const passport = require('passport');
 
 
+
 // Load User modal
 require('../models/User');
 const User = mongoose.model('users');

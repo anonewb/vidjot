@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+// using destructuring
+const {ensureAuthenticated} = require('../helpers/auth');
 
 // Load Idea modal
 require('../models/Idea');
@@ -12,14 +14,14 @@ const Idea = mongoose.model('ideas');
 //** IN THIS ROUTE PAGE, BEGINNING '/' IN THE ROUTE POINTS TO '/ideas' 
 
 // ADD IDEA FORM ROUTE
-router.get('/add', (req, res) => {
+router.get('/add', ensureAuthenticated, (req, res) => {
   // ADDING IDEAS USING FORM
   res.render('ideas/add');
 });
 
 
 // POSTING, PROCESSING AND SAVING IDEA TO MONGODB
-router.post('/', (req, res) => {
+router.post('/', ensureAuthenticated, (req, res) => {
   // res.send('ideas processed');
   // body-parser is required. 
   // "req.body" is an obj with all our form-fields
@@ -68,7 +70,7 @@ router.post('/', (req, res) => {
 
 
 // IDEA INDEX PAGE
-router.get('/', (req, res) => {
+router.get('/', ensureAuthenticated, (req, res) => {
   // FETCHING IDEAS FROM MONGODB
   Idea.find({})
     .sort({date:'desc'})
@@ -81,7 +83,7 @@ router.get('/', (req, res) => {
 });
 
 // EDIT IDEA FORM ROUTE
-router.get('/edit/:id', (req, res) => { // ':id' is a parameter OR placeholder which is diff
+router.get('/edit/:id', ensureAuthenticated, (req, res) => { // ':id' is a parameter OR placeholder which is diff
   // EDITING THE particular IDEA using id
   Idea.findOne({
     _id: req.params.id
@@ -94,7 +96,7 @@ router.get('/edit/:id', (req, res) => { // ':id' is a parameter OR placeholder w
 });
 
 // EDIT FORM PROCESS
-router.put('/:id', (req, res) => {
+router.put('/:id', ensureAuthenticated, (req, res) => {
   // res.send('PUT');
   Idea.findOne({
     _id: req.params.id
@@ -118,7 +120,7 @@ router.put('/:id', (req, res) => {
 
 
 // DELETE ROUTE
-router.delete('/:id', (req, res) => {
+router.delete('/:id', ensureAuthenticated, (req, res) => {
   // res.send('del');
   Idea.remove({_id: req.params.id})
     .then(() => {
