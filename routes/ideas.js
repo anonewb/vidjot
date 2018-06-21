@@ -48,7 +48,8 @@ router.post('/', ensureAuthenticated, (req, res) => {
     // IF VALID, THEN CREATE NEW IDEA AND SAVE IT TO MONGODB
     const newUser = {
       title: req.body.title,
-      details: req.body.details
+      details: req.body.details,
+      user: req.user.id
     }
     new Idea(newUser)
       .save()
@@ -72,7 +73,7 @@ router.post('/', ensureAuthenticated, (req, res) => {
 // IDEA INDEX PAGE
 router.get('/', ensureAuthenticated, (req, res) => {
   // FETCHING IDEAS FROM MONGODB
-  Idea.find({})
+  Idea.find({user: req.user.id})
     .sort({date:'desc'})
     .then(ideas => {
       // RENDERING ALL THE IDEAS
@@ -89,9 +90,14 @@ router.get('/edit/:id', ensureAuthenticated, (req, res) => { // ':id' is a param
     _id: req.params.id
   })
   .then(idea => {
-    res.render('ideas/edit', {
-      idea: idea
-    });
+    if (idea.user != req.user.id) {
+      req.flash('error_msg', 'Not Authorized');
+      res.redirect('/ideas');
+    } else {
+      res.render('ideas/edit', {
+        idea: idea
+      });
+    }
   });
 });
 
